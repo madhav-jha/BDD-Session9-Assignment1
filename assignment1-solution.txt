@@ -1,0 +1,28 @@
+petroleum_data = LOAd 'petroleum-dataset.txt' USING PigStorage(',') AS (dist_id:chararray, dist_name:chararray, buy_rate:chararray, sell_rate:chararray, vol_in:int, vol_out:int, year:int);
+
+1. What is the total amount of petrol in volume sold by every distributer?
+
+total_petrol_sold = FOREACH petroleum_data GENERATE dist_id, vol_out;
+DUMP total_petrol_sold;
+
+2. Which are the top 10 distributers ID's for selling petrol? Also display the amount of petrol sold in volume.
+
+total_petrol_sold = FOREACH petroleum_data GENERATE dist_id, vol_out;
+total_petrol_sold_ordered = ORDER total_petrol_sold BY vol_out DESC;
+top_ten_dist = LIMIT total_petrol_sold_ordered 10;
+DUMP top_ten_dist;
+
+3. List 10 years where consumption of petrol is more with the distributer id who sold it.
+
+total_petrol_sold = FOREACH petroleum_data GENERATE dist_id, vol_out, year;
+total_petrol_sold_ordered = ORDER total_petrol_sold BY vol_out DESC;
+top_ten_dist = LIMIT total_petrol_sold_ordered 10;
+top_ten_years = FOREACH top_ten_dist GENERATE dist_id, year;
+DUMP top_ten_years;
+
+4. Find the distributer name who sold petrol in least amount.
+
+total_petrol_sold = FOREACH petroleum_data GENERATE dist_id, dist_name, vol_out;
+total_petrol_sold_ordered = ORDER total_petrol_sold BY vol_out ASC;
+dist_name_least_sold = LIMIT total_petrol_sold_ordered 1;
+DUMP dist_name_least_sold;
